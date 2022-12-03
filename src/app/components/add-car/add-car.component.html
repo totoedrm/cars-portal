@@ -1,0 +1,161 @@
+<div class="container-fluid p-4">
+    <div class="card">
+        <mat-stepper #stepper [linear]="true">
+            <mat-step [stepControl]="firstFormGroup">
+                <form [formGroup]="firstFormGroup">
+                    <ng-template matStepLabel>Fill out car details</ng-template>
+                    <div class="row  my-3">
+                        <div class="col-lg-3 col-6">
+                            <label for="brand">Brand*</label>
+                            <div class="input-group ">
+                                <input type="text" class="form-control col-4" id="brand" placeholder="Brand"
+                                    formControlName="brand" [class.valid]="brand!.valid && 
+                                    (brand!.dirty || brand!.touched)" [class.invalid]="brand!.invalid && 
+                                    (brand!.dirty || brand!.touched)">
+
+                            </div>
+                            <div *ngIf="brand!.invalid && (brand!.dirty || brand!.touched)">
+                                <div class=" text-danger mt-2" *ngIf="brand!.errors?.['required']">
+                                    Brand is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <label for="model">Model*</label>
+                            <div class="input-group ">
+                                <input class="form-control col-4" id="model" type="text" placeholder="Model"
+                                    formControlName="model">
+                            </div>
+                            <div *ngIf="year!.invalid && (model!.dirty || model!.touched)">
+                                <div class=" text-danger mt-2" *ngIf="model!.errors?.['required']">
+                                    Model is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <label for="year">Year*</label>
+                            <div class="input-group ">
+                                <input class="form-control col-4" id="year" type="text" placeholder="Year"
+                                    formControlName="year">
+                            </div>
+                            <div *ngIf="year!.invalid && (year!.dirty || year!.touched)">
+                                <div class=" text-danger mt-2" *ngIf="year!.errors?.['required']">
+                                    Year is required.
+                                </div>
+                                <div *ngIf="year!.errors?.['pattern']" class=" text-danger mt-2">
+
+                                    Only numbers allowed.
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" col-lg-3 col-6">
+                            <label for="color">Color*</label>
+                            <select class="form-select " aria-label="Default select example" id="color"
+                                formControlName="color">
+                                <option value="" disabled selected>Select color</option>
+                                <option *ngFor="let color of colors" value="{{color}}">{{color}}</option>
+                            </select>
+                            <div *ngIf="year!.invalid && (color!.dirty || color!.touched)">
+                                <div class=" text-danger mt-2" *ngIf="color!.errors?.['required']">
+                                    Color is required.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row   align-content-center ">
+                        <div class="col-lg-3 col-6">
+                            <label for="km">Km</label>
+                            <div class="input-group ">
+
+                                <input type="text" class="form-control col-4" id="km" placeholder="Km"
+                                    formControlName="km">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <label for="shift">Shift type</label>
+
+                            <select class="form-select " aria-label="Default select example" id="shift"
+                                formControlName="shift">
+                                <option value="" disabled selected>Select shift type</option>
+                                <option *ngFor="let shift of shifts" value="{{shift}}">{{shift}}</option>
+                            </select>
+
+                        </div>
+
+                        <div class="col-lg-3 col-6 my-auto ">
+                            <input class="form-check-input custom-control-input p-2" type="checkbox" value="true"
+                                id="e_car" (click)="check()" formControlName="e_car">
+                            <label class="form-check-label mx-2 py-1" for="carType">
+                                Electric car
+                            </label>
+
+                        </div>
+                        <div class="col-lg-3 col-6" *ngIf="!ischeck">
+                            <label for="fuel">Fuel type</label>
+                            <select class="form-select " aria-label="Default select example" id="fuel"
+                                formControlName="fuel">
+                                <option value="" disabled selected>Select fuel type</option>
+                                <option *ngFor="let fuel of fuels" value="{{fuel}}">{{fuel}}</option>
+                            </select>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col-lg-3 col-6">
+                                <label for="carType">Car type</label>
+                                <select class="form-select " aria-label="Default select example" id="type"
+                                    formControlName="car_type">
+                                    <option value="" disabled selected>Select type</option>
+                                    <option *ngFor="let type of types" value="{{type}}">{{type}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary col-1" matStepperNext>Next</button>
+                        </div>
+                    </div>
+
+                </form>
+            </mat-step>
+            <mat-step [stepControl]="secondFormGroup" label="Fill out damages">
+                <form class="my-3" [formGroup]="secondFormGroup">
+
+                    <div *ngFor="let group of damages.controls; let i=index" formArrayName="damages">
+                        <div class="row my-3 " [formGroupName]="i">
+                            <div class="col-9">
+                                <input type="text" formControlName="damage" class="form-control"
+                                    placeholder="Damage description">
+                            </div>
+                            <div class=" col-3">
+                                <input type="text" formControlName="price" class="form-control"
+                                    placeholder="Damage cost">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row gx-2">
+                        <div class="col-1">
+                            <button class="btn btn-primary col-12 text-truncate" (click)="addDamage()">Add
+                                damage</button>
+                        </div>
+                        <div class="col-9"></div>
+                        <div class="col-1">
+                            <button class="btn btn-primary col-12 text-truncate" matStepperPrevious>Back</button>
+                        </div>
+                        <div class="col-1">
+                            <button class="btn btn-primary col-12 text-truncate" (click)="onSubmit()">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </mat-step>
+            <!--mat-step>
+                <ng-template matStepLabel>Done</ng-template>
+                <p>You are now done.</p>
+                <div>
+                    <button class="btn btn-primary" matStepperPrevious>Back</button>
+                    <button class="btn btn-primary" (click)="stepper.reset()">Reset</button>
+                </div>
+            </mat-step-->
+        </mat-stepper>
+    </div>
+</div>
